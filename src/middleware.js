@@ -1,3 +1,4 @@
+const {parse} = require("node-html-parser");
 
 //request interception and handling 
 function response_handler(req,res,next){
@@ -6,7 +7,7 @@ function response_handler(req,res,next){
 
     //func override for reponse body modification
     res.send = function(body){
-        const response_body = body +"test"
+        const response_body = body 
         og_send.call(this,response_body)
         };
     next();
@@ -18,7 +19,7 @@ function json_handler(req,res,next){
 
     res.json = function(body) {
         const json_response_body = {...body}
-        og_json.call(this,json_response_body + "test")
+        og_json.call(this,json_response_body)
     }
     next();
 }

@@ -3,6 +3,7 @@
     "@tomphttp/bare-server-node": "^2.0.4",
     "express": "^4.21.0",
     "node-fetch": "^3.3.2",
+    "node-html-parser": "^6.1.13",
     "parse5": "^7.1.2"
   },
   "scripts": {

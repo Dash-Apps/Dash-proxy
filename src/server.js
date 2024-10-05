@@ -2,7 +2,7 @@ const {json_handler,response_handler} = require('./middleware.js')
 const express = require('express');
 const https = require("node:https");
 const app = express();
-const port = 3000;
+const port = 8080;
 
 app.use(response_handler)
 app.use(json_handler)
@@ -10,24 +10,20 @@ app.use(json_handler)
 app.get('/', (req, res) => {
   res.send('this is the root for this server')
 });
-//debugging endpoint
-
-app.get('/request/:URL',(req,res) => {
-    url = req.params
-    res.send(url[URL])
-    https.get(url, (req_response) => {
-
-      console.log('statusCode:', req_response.statusCode);
-      console.log('headers:', req_response.headers);
-    
+//request endpoint
+app.get('/request',(req,res) => {
+    https.get("https://example.com/", (req_response) => {
+      //set request headers
+      res.set(req_response.headers);
+      //send data once request is intercepted and processed by the middleware
       req_response.on('data', (d) => {
-        res.send(d)
+        res.send(d);
       });
-    
+      //send error if one occurs
     }).on('error', (e) => {
-      console.error(e);
+      res.send(e);
     });
-    res.send()    
+   
 });
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)
