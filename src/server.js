@@ -1,27 +1,31 @@
 const {json_handler,response_handler} = require('./middleware.js')
 const express = require('express');
 const https = require("node:https");
+const cors = require('cors');
 const app = express();
 const port = 8080;
-
+app.use(cors())
 app.use(response_handler)
-app.use(json_handler)
+
 //homepage endpoint
 app.get('/', (req, res) => {
-  res.send('this is the root for this server')
+  res.sendFile('./index.html')
 });
 //request endpoint
 app.get('/request',(req,res) => {
-    https.get("https://example.com/", (req_response) => {
-      //set request headers
-      res.set(req_response.headers);
+    const queries = req.query;
+    https.get(queries["url"], (req_response) => {
+
       //send data once request is intercepted and processed by the middleware
       req_response.on('data', (d) => {
-        res.send(d);
+        if (res.headersSent){
+          res.write(d)
+        }else{
+          res.set(req_response.headers)
+          res.write(d)
+        }
       });
       //send error if one occurs
-    }).on('error', (e) => {
-      res.send(e);
     });
    
 });

@@ -1,14 +1,15 @@
+const { response, json } = require("express");
 const {parse} = require("node-html-parser");
 
 //request interception and handling 
 function response_handler(req,res,next){
     //original intact send func
-    const og_send = res.send;
-
+    const og_write = res.write;
     //func override for reponse body modification
-    res.send = function(body){
-        const response_body = body 
-        og_send.call(this,response_body)
+    res.write = function(body){
+        // appends dummy text to the end of
+        const response_body = body;
+        og_write.call(this,response_body)
         };
     next();
     }
