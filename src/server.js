@@ -9,18 +9,18 @@ app.use(response_handler)
 
 //homepage endpoint
 app.get('/', (req, res) => {
-  res.sendFile('./index.html')
+  res.sendFile('/workspaces/Dash-proxy/src/index.html')
 });
 //request endpoint
 app.get('/request',(req,res) => {
     const queries = req.query;
     https.get(queries["url"], (req_response) => {
 
-      //send data once request is intercepted and processed by the middleware
-      req_response.on('data', (d) => {
-        if (res.headersSent){
+    //send data once request is intercepted and processed by the middleware
+    req_response.on('data', (d) => {
+    if (res.headersSent){
           res.write(d)
-        }else{
+    }else{
           res.set(req_response.headers)
           res.write(d)
         }
